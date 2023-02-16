@@ -8,7 +8,6 @@ create_table()
 def notify_supervisor(email: str):
     print("Sended email about deadline to {}".format(email))
 
-
 if __name__ == '__main__':
     while True:
         orders = get_orders()
