@@ -23,7 +23,8 @@ if __name__ == '__main__':
                 objectName=random.choice(["Magnum", "Small", "School 5"]),
                 description=random.choice(["Clean", "Dirty", "Very dirty"]),
                 deadline=random.choice(datetimes),
-                status=CleaningOrderStatus.created.value
+                status=CleaningOrderStatus.created.value,
+                supervisor_email=random.choice(["zhamila@gmail.com", "test@gmail.com", "almau@gmail.com"])
             )
         )
         print("Inserted")
