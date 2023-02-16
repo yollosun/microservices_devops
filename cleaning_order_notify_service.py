@@ -5,9 +5,11 @@ from cleaning_order.cleaning_order_status import CleaningOrderStatus
 
 create_table()
 
+def notify_supervisor(email: str):
+    print("Sended email about deadline to {}".format(email))
+
+
 if __name__ == '__main__':
-    def notify_supervisor(email: str):
-        print("Sended email about deadline to {}".format(email))
     while True:
         orders = get_orders()
         for order in orders:

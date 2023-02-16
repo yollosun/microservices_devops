@@ -38,10 +38,10 @@ def insert_order(order: CleaningOrderDAO):
     conn.commit()
 
 
-def update_order_status(statusId: int, orderId: int):
-    query = "UPDATE cleaning_orders_zhamila SET status='{}' WHERE id={}".format(statusId, orderId)
+def update_order_status(status_id: int, order_id: int):
+    query = "UPDATE cleaning_orders_zhamila SET status=:status WHERE id=:order_id;"
     cursor = conn.cursor()
-    cursor.execute(query)
+    cursor.execute(query, status=status_id, order_id=order_id)
     conn.commit()
 
 
