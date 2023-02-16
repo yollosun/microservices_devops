@@ -7,7 +7,7 @@ Create a new table: cleaning_order, with the following columns:
 - status (int) default "created"
 
 Services: 
-1. Create a new transaction every minute.
+1. Create a new order every minute.
 1. Read all transactions from the database and check the deadline, if deadline is over change status to "overdue"
 
 Instructions:
