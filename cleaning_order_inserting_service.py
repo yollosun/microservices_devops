@@ -4,8 +4,9 @@ from cleaning_order.cleaning_order_repository import create_table, insert_order
 from cleaning_order.cleaning_order_dao import CleaningOrderDAO
 from cleaning_order.cleaning_order_status import CleaningOrderStatus
 import datetime
+from credentials import conn
 
-create_table()
+create_table(conn)
 
 
 
@@ -19,6 +20,7 @@ if __name__ == '__main__':
         datetime.datetime(2023, 2, 15, 11, 11, 12, 99000)
         ]
         insert_order(
+            conn,
             CleaningOrderDAO(
                 objectName=random.choice(["Magnum", "Small", "School 5"]),
                 description=random.choice(["Clean", "Dirty", "Very dirty"]),

@@ -1,16 +1,9 @@
-import psycopg2
 from cleaning_order.cleaning_order_dao import CleaningOrderDAO
 from cleaning_order.cleaning_order_status import CleaningOrderStatus
+from sqlalchemy.engine import Connection
+from sqlalchemy import text
 
-conn = psycopg2.connect(
-    host="test.dsacademy.kz",
-    database="fortesting",
-    user="testing",
-    password="testing123"
-)
-
-
-def create_table():
+def create_table(conn: Connection):
     query = """
     CREATE TABLE IF NOT EXISTS cleaning_orders_zhamila (
         id SERIAL PRIMARY KEY,
@@ -22,33 +15,42 @@ def create_table():
         )
     """
 
-    cursor = conn.cursor()
-    cursor.execute(query)
+    conn.execute(text(query))
     conn.commit()
 
 
-def insert_order(order: CleaningOrderDAO):
+def insert_order(conn: Connection, order: CleaningOrderDAO):
     query = """
     INSERT INTO cleaning_orders_zhamila (objectName, description, deadline, status, supervisor_email)
-    VALUES (%s, %s, %s, %s, %s)
+    VALUES (:objectName, :description, :deadline, :status, :supervisor_email);
     """
-
-    cursor = conn.cursor()
-    cursor.execute(query, (order.objectName, order.description, order.deadline, order.status, order.supervisor_email))
+    conn.execute(
+        text(query),
+        parameters={
+            "objectName": order.objectName,
+            "description": order.description,
+            "deadline": order.deadline,
+            "status": order.status,
+            "supervisor_email": order.supervisor_email
+        },
+    )
     conn.commit()
 
 
-def update_order_status(status_id: int, order_id: int):
-    query = "UPDATE cleaning_orders_zhamila SET status=:status WHERE id=:order_id;"
-    cursor = conn.cursor()
-    cursor.execute(query, status=status_id, order_id=order_id)
+def update_order_status(conn: Connection, status_id: int, order_id: int):
+    parameters = {
+        "order_id": order_id,
+        "status_id": status_id
+    }
+    query = f"UPDATE cleaning_orders_zhamila SET status = '{parameters['status_id']}' WHERE id= '{parameters['order_id']}';"
+    conn.execute(text(query))
     conn.commit()
 
 
-def get_orders() -> list[CleaningOrderDAO]:
+def get_orders(conn: Connection) -> list[CleaningOrderDAO]:
     query = "SELECT * FROM cleaning_orders_zhamila;"
-    cursor = conn.cursor()
-    cursor.execute(query)
+    orders = conn.execute(text(query)).fetchall()
+    conn.execute(text(query))
     return [CleaningOrderDAO(
         id=order[0],
         objectName=order[1],
@@ -56,4 +58,4 @@ def get_orders() -> list[CleaningOrderDAO]:
         deadline=order[3],
         status=order[4],
         supervisor_email=order[5]
-    ) for order in cursor.fetchall()]
+    ) for order in orders]
