@@ -30,4 +30,4 @@ if __name__ == '__main__':
             )
         )
         print("Inserted")
-        time.sleep(10)
+        time.sleep(10000)
